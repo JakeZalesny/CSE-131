@@ -1,5 +1,5 @@
 # 1. Name:
-#      -your name-
+#      Jake Zalesny
 # 2. Assignment Name:
 #      Lab 01: Tic-Tac-Toe
 # 3. Assignment Description:
@@ -16,6 +16,8 @@ import json
 X = 'X'
 O = 'O'
 BLANK = ' '
+TURN_COUNTER = 0
+FILENAME = "tictactoe.json"
 
 # A blank Tic-Tac-Toe board. We should not need to change this board;
 # it is only used to reset the board to blank. This should be the format
@@ -30,20 +32,55 @@ blank_board = {
 def read_board(filename):
     '''Read the previously existing board from the file if it exists.'''
     # Put file reading code here.
-    return blank_board['board']
+    with open(filename) as f: 
+        data = f.read()
+        board = json.loads(data)
+    return board['board']
 
 def save_board(filename, board):
     '''Save the current game to a file.'''
     # Put file writing code here.
+    transcription_board = blank_board
+    
+    transcription_board["board"] = board
+    with open(filename, "w") as w :
+        json.dumps(transcription_board)
+    
+    quit()
 
 def display_board(board):
     '''Display a Tic-Tac-Toe board on the screen in a user-friendly way.'''
     # Put display code here.
+    for i in range(0, 9):
+        if i == 2 or 5 :
+            print(f" {board[i]} \n")
+            print("---+---+---")
+        
+        elif i == 8 :
+            print(f" {i} \n")
+        
+        else :
+            print(f" {board[i]} |")
+        
 
-def is_x_turn(board):
+def is_x_turn(board, turn_counter):
     '''Determine whose turn it is.'''
     # Put code here determining if it is X's turn.
-    return True
+    if turn_counter % 2 == 0 :
+        turn_counter += 1
+        return True
+    
+    else:
+        turn_counter += 1 
+        return False
+
+def get_x_input(board):
+    x = input("X> ")
+    if x == "q" :
+        save_board(FILENAME,board)
+    
+    else:
+        return x
 
 def play_game(board):
     '''Play the game of Tic-Tac-Toe.'''
