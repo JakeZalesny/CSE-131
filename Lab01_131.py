@@ -9,7 +9,6 @@
 # 5. How long did it take for you to complete the assignment?
 #      1.5 hrs
 
-from ast import While
 import json
 
 # The characters used in the Tic-Tac-Too board.
