@@ -5,9 +5,9 @@
 # 3. Assignment Description:
 #      Play the game of Tic-Tac-Toe
 # 4. What was the hardest part? Be as specific as possible.
-#      -a paragraph or two about how the assignment went for you-
+#      Having to resubmit due to a freak github accident
 # 5. How long did it take for you to complete the assignment?
-#      -total time in hours including reading the assignment and submitting the program-
+#      1.5 hrs
 
 from ast import While
 import json
@@ -169,12 +169,19 @@ print("The current board is:")
 
 # The file read code, game loop code, and file close code goes here.
 def main():
+    # This is used to determine who's turn it is
+    # Everytime it strikes an odd number it switches turns
     turn_counter = 0
     board = read_board(FILENAME)
+    
+    # This is what plays the game and determines when
+    # it's over
     while game_done(board, message= False) == False :
         turn = is_x_turn(board, turn_counter)
         play_game(board, turn)
         turn_counter += 1
+    
+    # This clears the board on the file
     clear_board(FILENAME, board)
     game_done(board, message= True)
 
