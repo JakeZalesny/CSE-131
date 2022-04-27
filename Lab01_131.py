@@ -9,6 +9,7 @@
 # 5. How long did it take for you to complete the assignment?
 #      -total time in hours including reading the assignment and submitting the program-
 
+from ast import While
 import json
 
 # The characters used in the Tic-Tac-Too board.
@@ -40,27 +41,36 @@ def read_board(filename):
 def save_board(filename, board):
     '''Save the current game to a file.'''
     # Put file writing code here.
-    transcription_board = blank_board
-    
+    transcription_board = {
+        "board": [
+            " ", " ", " ",
+            " ", " ", " ",
+            " ", " ", " "
+        ]
+    }
     transcription_board["board"] = board
     with open(filename, "w") as w :
-        json.dumps(transcription_board)
+        json.dump(transcription_board, w)
     
     quit()
+
+def clear_board(filename, board) :
+    with open(filename, "w") as w :
+        json.dump(blank_board, w)
 
 def display_board(board):
     '''Display a Tic-Tac-Toe board on the screen in a user-friendly way.'''
     # Put display code here.
     for i in range(0, 9):
-        if i == 2 or 5 :
-            print(f" {board[i]} \n")
+        if i == 2 or i == 5 :
+            print(f" {board[i]} ")
             print("---+---+---")
         
         elif i == 8 :
-            print(f" {i} \n")
+            print(f" {board[i]} \n")
         
         else :
-            print(f" {board[i]} |")
+            print(f" {board[i]} |", end="")
         
 
 def is_x_turn(board, turn_counter):
@@ -82,9 +92,28 @@ def get_x_input(board):
     else:
         return x
 
-def play_game(board):
+def get_o_input(board):
+    o = input("O> ")
+    if o == "q" :
+        save_board(FILENAME, board)
+    
+    else :
+        return o
+
+def play_game(board, turn):
     '''Play the game of Tic-Tac-Toe.'''
     # Put game play code here. Return False when the user has indicated they are done.
+    display_board(board)
+    if turn :
+        x = int(get_x_input(board))
+        board[x - 1] = X
+        display_board(board)
+    
+    else :
+        o = int(get_o_input(board))
+        board[o - 1] = O
+        display_board(board)
+    
     return False
 
 def game_done(board, message=False):
@@ -139,3 +168,14 @@ print(" 7 | 8 | 9 \n")
 print("The current board is:")
 
 # The file read code, game loop code, and file close code goes here.
+def main():
+    turn_counter = 0
+    board = read_board(FILENAME)
+    while game_done(board, message= False) == False :
+        turn = is_x_turn(board, turn_counter)
+        play_game(board, turn)
+        turn_counter += 1
+    clear_board(FILENAME, board)
+    game_done(board, message= True)
+
+main()
