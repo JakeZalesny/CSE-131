@@ -3,15 +3,39 @@ Calendar Program
 
 """
 
+def month_list():
+    month_list = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+    ]
+    return month_list
 
 def month_to_day():
-    month_to_day = [
-    # Month numbers are:
-    #   1   2   3   4   5   6   7   8   9   10  11  12
-        31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
-    
-    ]
-    
+    month_to_day = {
+        "January":31, 
+        "February":(28,29),
+        "March":31, 
+        "April":30, 
+        "May":31, 
+        "June":30, 
+        "July":31, 
+        "August":31, 
+        "September":30, 
+        "October":31, 
+        "November":30, 
+        "December":31
+    }
+
     return month_to_day
 
 def get_month_number() -> int:
@@ -22,22 +46,29 @@ def get_year() -> int:
     year = int(input("Enter a year number: "))
     return year
 
-def is_leap_year(year, month_to_days):
+def is_leap_year(year, month_to_day):
     pass
 
-def compute_offset(year, month_to_days, month_number):
+def compute_offset(year: int, month_to_day: dict, month_number: int, month_list: list):
     offset = 0
     day_total = 0
     month_total = 0
     for year in range(1753, year - 1):
-        if is_leap_year(year, month_to_days) :
+        if is_leap_year(year, month_to_day) :
             day_total += 366
         
         else :
             day_total += 365
     
-    for month in range(0, month_number - 1) :
-        month_total += month_to_days[month]
+    for month in month_to_day :
+        if month == month_list[month_number - 1]:
+            break
+        
+        elif is_leap_year(year, month_to_day) and month == "February" :
+            month_total += month_to_day[month][2]
+        
+        else : 
+            month_total += month_to_day[month]
     
     total = month_total + day_total
 
