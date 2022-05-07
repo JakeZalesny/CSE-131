@@ -77,7 +77,7 @@ Rtrns: Returns User input for the desired month number
 """
 def get_month_number() -> int:
     month_number = int(input("Enter a month number: "))
-    return month_number
+    return int(month_number)
 
 """
 GET YEAR
@@ -87,7 +87,7 @@ Rtrns: Returns User input for the desired year
 """
 def get_year() -> int:
     year = int(input("Enter a year number: "))
-    return year
+    return int(year)
 
 """
 IS LEAP YEAR
@@ -228,8 +228,17 @@ Calls each function and runs the program
 def main():
     month_to_days = month_to_day()
     month = month_list()
+    
     month_number = get_month_number()
+    while month_number > 12 or month_number < 1:
+        print("ERROR: Invalid month number")
+        month_number = get_month_number()
+    
     year = get_year()
+    while year < 1753:
+        print("ERROR: Please enter a year after 1752")
+        year = get_year()
+    
     offset = compute_offset(year, month_to_days, month_number, month)
     display_calendar(year, month_to_days, offset, month_number, month)
 
