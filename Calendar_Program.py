@@ -97,14 +97,13 @@ Rtrns: Returns True or False based on the calculation of the leap year
 """
 def is_leap_year(year: int, month_to_day: dict):
     if year % 4 == 0: 
-        return True
-    
-    elif year % 4 == 0 and year % 100 == 0 :
-        return True
-    
-    elif year % 400 == 0 :
-        return True
-    
+        if year % 100 :
+            if year % 400 :
+                return True
+            else :
+                return False
+        else :
+            return False
     else :
         return False
 
@@ -121,28 +120,29 @@ def compute_offset(year: int, month_to_day: dict, month_number: int, month_list:
     offset = 0
     day_total = 0
     month_total = 0
-    for year in range(1753, year - 1):
+    for year in range(1753, year):
         if is_leap_year(year, month_to_day) :
             day_total += 366
         
         else :
             day_total += 365
     
-    for month in month_to_day :
-        if month == month_list[month_number - 1]:
+    for month in month_list :
+        if month == month_list[month_number - 1] and month_number == 1:
             break
         
         elif is_leap_year(year, month_to_day) and month == "February" :
             month_total += month_to_day[month] + 1
         
-        else : 
-            month_total += int(month_to_day[month])
+        elif month == month_list[month_number - 1] :
+            break
+        
+        month_total += int(month_to_day[month])
     
-    total = month_total + day_total
+    total = month_total + day_total + 1
 
     offset = total % 7
-
-    return offset - 1
+    return offset 
 
 """
 DISPLAY CALENDAR
