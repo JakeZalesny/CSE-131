@@ -1,7 +1,19 @@
 """
-
+# 1. Name:
+#      Jake Zalesny
+# 2. Assignment Name:
+#      Lab 05 : Sudoku Draft
+# 3. Assignment Description:
+#      So far, its just meant to put a value in a square in a sudoku game
+# 4. What was the hardest part? Be as specific as possible.
+#      The hardest part for me was configuring the display and saving the board. 
+#       I kept running into configuration errors with the display and I kept only saving
+#       zeros every time I saved the board which was problematic. I finally solved it with 
+#       only a couple of minor adjustments. 
+# 5. How long did it take for you to complete the assignment?
+#      2.5 hours.
 """
-from fileinput import filename
+
 import json
 HARD_FILE = "131.05.Hard.json"
 MEDIUM_FILE = "131.05.Medium.json"
