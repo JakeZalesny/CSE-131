@@ -15,6 +15,7 @@
 """
 
 import json
+from lib2to3.pytree import convert
 HARD_FILE = "131.05.Hard.json"
 MEDIUM_FILE = "131.05.Medium.json"
 EASY_FILE = "131.05.Easy.json"
@@ -59,13 +60,104 @@ def coordinate_dictionary():
     }
     return coordinate_dictionary
 
-def insert_value(coordinate_dictionary: dict, user_square: str, user_value: int, board: list):
+def convert_column_to_value(user_square: str) -> str:
     column = user_square[0].upper()
-    column_number = coordinate_dictionary[column]
+    return column
+
+def convert_row_to_int(user_square: str) -> int:
     row = int(user_square[1]) - 1
-    board[row][column_number] = user_value
+    return row
+
+def convert_column_to_int(column: str, coordinate_dictionary: dict) -> int: 
+    column_number = coordinate_dictionary[column]
+    return column_number
+
+def insert_value(coordinate_dictionary: dict, column: str, row: int, column_number: int, user_value: int, board: list):
+    is_valid = True
+    while is_valid: 
+        is_valid = check_column(column, coordinate_dictionary)
+        is_valid = check_row(row)
+        board[row][column_number] = user_value
+
+def possible_values(occupied_column_list: list, occupied_row_list: list):
+    occupied_list = []
+    possible_values = []
+
+    for i in occupied_row_list :
+        occupied_list.append(i)
+    
+    for i in occupied_column_list :
+        occupied_list.append(i)
+    
+    for value in range(10) :
+        if value not in occupied_list :
+            possible_values.append(value)
+    
+    return possible_values
 
 
+# Checks the column to see if the value is valid
+def check_column(column: str, coordinate_dictionary: dict) -> bool:
+    if column in coordinate_dictionary.keys():
+        return True
+    
+    else :
+        print("ERROR: Invalid Column! Please try again.")
+        return False
+
+# Checks the row to see if the inserted row is valid 
+def check_row(row: int) -> bool:
+    if row > 9 :
+        return False
+    
+    else :
+        print("ERROR: Invalid Row! Please try again.")
+        return True
+
+# Checks to see if the square is empty or not
+def check_square_for_value(row: int, column_number: int, board: list) -> bool:
+    if board[row][column_number] != " ":
+        print("ERROR: Square already has a value! please try again.")
+        return False
+    
+    else :
+        return True
+
+# Returns all the numbers that are in the row
+def check_unique_row(row: int, column_number: int, board: list, user_value: int) :
+    occupied_number_list_column = []
+    for i in board[row] :
+        if i != " ":
+            occupied_number_list_column.append(i)
+    
+    return occupied_number_list_column
+
+# Compares all numbers in the row to user's input
+def is_occupied_row(occupied_number_list_row: list, user_value: int) -> bool:
+    for i in occupied_number_list_row :
+        if user_value == i :
+            return False
+        
+        else :
+            return True
+
+# Returns a list of numbers in the column 
+def check_unique_column(column_number: int, board: list, user_value: int) :
+    occupied_number_list_column = []
+    for i in range(8):
+        if board[i][column_number] != " ":
+            occupied_number_list_column.append(board[i][column_number])
+        
+        return occupied_number_list_column
+
+# Compares to list of numbers in the column 
+def is_occupied_column(occupied_number_list_column: list, user_value: int) -> bool:
+    for i in occupied_number_list_column :
+        if user_value == i :
+            return False
+
+        else :
+            return True
 
 
 def get_user_square(board, filename):
@@ -77,7 +169,14 @@ def get_user_square(board, filename):
         return user_square
 
 def get_value(user_square: str) -> int: 
-    user_value = int(input(f"What number goes in {user_square}? "))
+    user_value = 0
+    
+    while user_value <= 0 or user_value >= 10 :
+        user_value = int(input(f"What number goes in {user_square}? "))
+        
+        if user_value <= 0 or user_value >= 10 :
+            print("ERROR: Invalid Value, please enter a number from 1 to 9.")
+    
     return user_value
 
 def display_board(board: list):
@@ -159,12 +258,22 @@ def save_board(board: list, filename: str):
 def main():
     board, filename = read_file()
     user_square = None
-    while user_square != "Q":
+    value_is_valid = True
+    while user_square != "Q" and value_is_valid == True:
         display_board(board)
         _coordinate_dictionary = coordinate_dictionary()
         user_square = get_user_square(board, filename)
         user_value = get_value(user_square)
-        insert_value(_coordinate_dictionary, user_square, user_value, board)
+        value_is_valid = True
+        column = convert_column_to_value(user_square)
+        row = convert_row_to_int(user_square)
+        column_number = convert_column_to_int(column, _coordinate_dictionary)
+        occupied_number_list_column = check_unique_column(column_number, board, user_value)
+        occupied_number_list_row = check_unique_row(row, column_number, board, user_value)
+        value_is_valid = is_occupied_column(occupied_number_list_column, user_value)
+        value_is_valid = is_occupied_row(occupied_number_list_row, user_value)
+        value_is_valid = check_square_for_value(row, column_number, board)
+        insert_value(_coordinate_dictionary, column, row, column_number, user_value, board)
     save_board(board, filename)
 
 main()
