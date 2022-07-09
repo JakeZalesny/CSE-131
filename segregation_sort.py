@@ -1,5 +1,18 @@
 """
-
+# 1. Name:
+#      Jake Zalesny
+# 2. Assignment Name:
+#      Lab 13 : Segregation Sort Program
+# 3. Assignment Description:
+#      This program is meant to sort an unsorted array of numbers using a recursion
+#       algorithm by splitting the list in two several times over and picking up the
+#       pieces.
+# 4. What was the hardest part? Be as specific as possible.
+#      It took me a second o n how to figure out how to implement calling the array variable 
+#       as a parameter rather than a globally scoped variable, but I realized that it wouldn't 
+#       affect the variable as long as it remained the same variable. 
+# 5. How long did it take for you to complete the assignment?
+#      2.5 hrs. 
 """
 import json
 
